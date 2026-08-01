@@ -19,8 +19,7 @@ public class FacultyController {
 
     @PostMapping
     public Long createFaculty(@RequestBody Faculty faculty) {
-        Faculty created = facultyService.addFaculty(faculty);
-        return created.getId();
+        return facultyService.addFaculty(faculty);
     }
 
     @GetMapping("{id}")
@@ -43,7 +42,8 @@ public class FacultyController {
         if (color != null && !color.isBlank()) {
             return facultyService.findByColor(color);
         }
-        return Collections.emptyList();
+        return facultyService.getAllFaculties();
+
     }
 
 }
