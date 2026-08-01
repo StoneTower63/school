@@ -37,10 +37,8 @@ public class FacultyService {
         facultyRepository.deleteById(id);
     }
 
-    public Collection<Faculty> findByColor(String color) {
-        return facultyRepository.findAll().stream()
-                .filter(faculty -> faculty.getColor().equalsIgnoreCase(color))
-                .toList();
+    public Collection<Faculty> searchByNameOrColor(String keyword) {
+        return facultyRepository.findByNameContainingIgnoreCaseOrColorContainingIgnoreCase(keyword, keyword);
     }
 
     public Collection<Faculty> getAllFaculties() {

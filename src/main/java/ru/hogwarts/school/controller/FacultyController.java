@@ -39,12 +39,11 @@ public class FacultyController {
     }
 
     @GetMapping
-    public Collection<Faculty> getFaculties(@RequestParam(required = false) String color) {
-        if (color != null && !color.isBlank()) {
-            return facultyService.findByColor(color);
+    public Collection<Faculty> getFaculties(@RequestParam(required = false) String nameOrColor) {
+        if (nameOrColor != null && !nameOrColor.isBlank()) {
+            return facultyService.searchByNameOrColor(nameOrColor);
         }
         return facultyService.getAllFaculties();
-
     }
 
     @GetMapping("/{id}/student")
