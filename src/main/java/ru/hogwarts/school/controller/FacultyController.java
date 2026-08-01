@@ -2,6 +2,7 @@ package ru.hogwarts.school.controller;
 
 import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school.model.Faculty;
+import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.FacultyService;
 
 import java.util.Collection;
@@ -44,6 +45,11 @@ public class FacultyController {
         }
         return facultyService.getAllFaculties();
 
+    }
+
+    @GetMapping("/{id}/student")
+    public Collection<Student> getStudentOfFaculty(@PathVariable Long id) {
+        return facultyService.getStudentsByFacultyId(id);
     }
 
 }
