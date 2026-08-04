@@ -1,6 +1,7 @@
 package ru.hogwarts.school.controller;
 
 import org.springframework.web.bind.annotation.*;
+import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.StudentService;
 
@@ -37,11 +38,14 @@ public class StudentController {
     }
 
     @GetMapping
-    public Collection<Student> getStudents(@RequestParam(required = false) Integer age) {
-        if (age != null) {
-            return studentService.findByAge(age);
-        }
-        return studentService.findByAge(0);
+    public Collection<Student> getStudentsByAgeRange(
+            @RequestParam int min,
+            @RequestParam int max) {
+        return studentService.findByAgeBetween(min, max);
     }
 
+    @GetMapping("/{id}/faculty")
+    public Faculty getFacultyOfStudent(@PathVariable Long id) {
+        return studentService.getFacultyByStudentId(id);
+    }
 }
