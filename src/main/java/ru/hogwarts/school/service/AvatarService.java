@@ -64,4 +64,9 @@ public class AvatarService {
         return fileName.substring(fileName.lastIndexOf(".") + 1);
 
     }
+
+    public Avatar findAvatar(long studentId) {
+        return avatarRepository.findByStudentId(studentId)
+                .orElseThrow(() -> new IllegalArgumentException("Аватар для студента с ID " + studentId + " не найден!"));
+    }
 }
