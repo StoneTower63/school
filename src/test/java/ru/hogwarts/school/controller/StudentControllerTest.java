@@ -76,6 +76,34 @@ public class StudentControllerTest {
         );
 
         Assertions.assertThat(negativeResponse.getStatusCode().is4xxClientError()).isTrue();
+    }
 
+    @Test
+    void testEditStudent() throws Exception {
+        Student student = new Student();
+        student.setName("Hermione Granger");
+        student.setAge(11);
+        Long createdId = restTemplate.postForObject("http://localhost:" + port + "/student", student, Long.class);
+
+        student.setId(createdId);
+        student.setName("Hermione Weasley");
+        restTemplate.put("http://localhost:" + port + "/student", student);
+
+        ResponseEntity<Student> response = restTemplate.getForEntity("http://localhost:" + port + "/student/" + createdId, Student.class);
+        Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        Assertions.assertThat(response.getBody().getName()).isEqualTo("Hermione Weasley");
+    }
+
+    @Test
+    void testDeleteStudent() throws Exception {
+        Student student = new Student();
+        student.setName("Draco Malfoy");
+        student.setAge(11);
+        Long createdId = restTemplate.postForObject("http://localhost:" + port + "/student", student, Long.class);
+
+        restTemplate.delete("http://localhost:" + port + "/student/" + createdId);
+
+        ResponseEntity<String> response = restTemplate.getForEntity("http://localhost:" + port + "/student/" + createdId, String.class);
+        Assertions.assertThat(response.getStatusCode().is4xxClientError()).isTrue();
     }
 }
