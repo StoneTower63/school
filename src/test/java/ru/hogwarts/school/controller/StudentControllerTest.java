@@ -10,6 +10,10 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import ru.hogwarts.school.model.Student;
+import ru.hogwarts.school.repository.AvatarRepository;
+import ru.hogwarts.school.repository.StudentRepository;
+
+import java.util.Collection;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class StudentControllerTest {
@@ -19,6 +23,12 @@ public class StudentControllerTest {
 
     @Autowired
     private StudentController studentController;
+
+    @Autowired
+    private AvatarRepository avatarRepository;
+
+    @Autowired
+    private StudentRepository studentRepository;
 
     @Autowired
     private TestRestTemplate restTemplate;
@@ -105,5 +115,29 @@ public class StudentControllerTest {
 
         ResponseEntity<String> response = restTemplate.getForEntity("http://localhost:" + port + "/student/" + createdId, String.class);
         Assertions.assertThat(response.getStatusCode().is4xxClientError()).isTrue();
+    }
+
+    @Test
+    void testGetStudentsByAgeRange() throws Exception {
+        avatarRepository.deleteAll();
+        studentRepository.deleteAll();
+        Student youngStudent = new Student();
+        youngStudent.setName("Harry J.");
+        youngStudent.setAge(10);
+        restTemplate.postForObject("http://localhost:" + port + "/student", youngStudent, Long.class);
+
+        Student oldStudent = new Student();
+        oldStudent.setName("Albus D.");
+        oldStudent.setAge(15);
+        restTemplate.postForObject("http://localhost:" + port + "/student", oldStudent, Long.class);
+
+        Collection<Student> result = restTemplate.getForObject(
+                "http://localhost:" + port + "/student?min=9&max=12",
+                Collection.class
+        );
+
+        Assertions.assertThat(result).isNotNull();
+        Assertions.assertThat(result).isNotEmpty();
+        Assertions.assertThat(result.size()).isEqualTo(1);
     }
 }
