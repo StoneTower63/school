@@ -47,4 +47,35 @@ public class StudentControllerTest {
         Assertions.assertThat(response.getBody()).isGreaterThan(0L);
 
     }
+
+    @Test
+    void testGetStudentInfo() throws Exception {
+        Student student = new Student();
+        student.setName("Ron Weasley");
+        student.setAge(11);
+
+        Long createdId = restTemplate.postForObject(
+                "http://localhost:" + port + "/student",
+                student,
+                Long.class
+        );
+
+        ResponseEntity<Student> response = restTemplate.getForEntity(
+                "http://localhost:" + port + "/student/" + createdId,
+                Student.class
+        );
+
+        Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        Assertions.assertThat(response.getBody()).isNotNull();
+        Assertions.assertThat(response.getBody().getId()).isEqualTo(createdId);
+        Assertions.assertThat(response.getBody().getName()).isEqualTo("Ron Weasley");
+
+        ResponseEntity<String> negativeResponse = restTemplate.getForEntity(
+                "http://localhost:" + port + "/student/-1",
+                String.class
+        );
+
+        Assertions.assertThat(negativeResponse.getStatusCode().is4xxClientError()).isTrue();
+
+    }
 }
