@@ -1,5 +1,6 @@
 package ru.hogwarts.school.controller;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
@@ -49,6 +50,12 @@ public class FacultyController {
     @GetMapping("/{id}/student")
     public Collection<Student> getStudentOfFaculty(@PathVariable Long id) {
         return facultyService.getStudentsByFacultyId(id);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String handleIllegalArgumentException(IllegalArgumentException ex) {
+        return ex.getMessage();
     }
 
 }
