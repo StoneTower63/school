@@ -50,4 +50,11 @@ public class StudentController {
     public Faculty getFacultyOfStudent(@PathVariable Long id) {
         return studentService.getFacultyByStudentId(id);
     }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String handleIllegalArgumentException(IllegalArgumentException ex) {
+        return ex.getMessage();
+    }
+
 }
