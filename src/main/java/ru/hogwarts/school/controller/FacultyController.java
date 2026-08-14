@@ -7,6 +7,7 @@ import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.FacultyService;
 
 import java.util.Collection;
+import java.util.Collections;
 
 @RestController
 @RequestMapping("/faculty")
@@ -56,4 +57,5 @@ public class FacultyController {
     public String handleIllegalArgumentException(IllegalArgumentException ex) {
         return ex.getMessage();
     }
+
 }

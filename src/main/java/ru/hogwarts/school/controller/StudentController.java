@@ -56,4 +56,5 @@ public class StudentController {
     public String handleIllegalArgumentException(IllegalArgumentException ex) {
         return ex.getMessage();
     }
+
 }
