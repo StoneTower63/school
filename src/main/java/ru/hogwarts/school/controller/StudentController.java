@@ -51,6 +51,21 @@ public class StudentController {
         return studentService.getFacultyByStudentId(id);
     }
 
+    @GetMapping("/count")
+    public Long getCountOfAllStudents() {
+        return studentService.getCountOfAllStudents();
+    }
+
+    @GetMapping("/average-age")
+    public Double getAverageAgeOfStudents() {
+        return studentService.getAverageAgeOfStudents();
+    }
+
+    @GetMapping("/last-five")
+    public Collection<Student> getLastFiveStudents() {
+        return studentService.getLastFiveStudents();
+    }
+
     @ExceptionHandler(IllegalArgumentException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String handleIllegalArgumentException(IllegalArgumentException ex) {
