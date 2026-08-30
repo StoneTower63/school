@@ -2,6 +2,8 @@ package ru.hogwarts.school.service;
 
 
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,7 @@ import java.util.List;
 @Service
 @Transactional
 public class AvatarService {
+    private static final Logger logger = LoggerFactory.getLogger(AvatarService.class);
 
     @Value("${path.to.avatars.folder}")
     private String avatarDir;
@@ -33,8 +36,12 @@ public class AvatarService {
     }
 
     public long uploadAvatar(Long studentId, MultipartFile file) throws IOException {
+        logger.info("Was invoked method for upload avatar");
         Student student = studentRepository.findById(studentId)
-                .orElseThrow(() -> new IllegalArgumentException("Студент с ID " + studentId + " не найден!"));
+                .orElseThrow(() -> {
+                    logger.error("Student not found with id = " + studentId);
+                    return new IllegalArgumentException("Студент с ID " + studentId + " не найден!");
+                });
 
         Path filePath = Path.of(avatarDir, studentId + "." + getExtension(file.getOriginalFilename()));
         Files.createDirectories(filePath.getParent());
@@ -55,6 +62,7 @@ public class AvatarService {
         avatar.setData(file.getBytes());
 
         Avatar savedAvatar = avatarRepository.save(avatar);
+        logger.debug("Avatar successfully saved to database with id = {}", savedAvatar.getId());
         return savedAvatar.getId();
 
     }
@@ -68,11 +76,17 @@ public class AvatarService {
     }
 
     public Avatar findAvatar(long studentId) {
+        logger.info("Was invoked method for find avatar by student id");
         return avatarRepository.findByStudentId(studentId)
-                .orElseThrow(() -> new IllegalArgumentException("Аватар для студента с ID " + studentId + " не найден!"));
+                .orElseThrow(() -> {
+                    logger.error("Avatar not found for student with id = " + studentId);
+                    return new IllegalArgumentException("Аватар для студента с ID " + studentId + " не найден!");
+                });
     }
 
     public List<Avatar> getAllAvatars(int page, int size) {
+        logger.info("Was invoked method for get all avatars");
+        logger.debug("Pagination used - page: {}, size: {}", page, size);
         PageRequest pageRequest = PageRequest.of(page, size);
         return avatarRepository.findAll(pageRequest).getContent();
     }
