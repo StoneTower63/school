@@ -94,5 +94,12 @@ public class StudentService {
                 .toList();
     }
 
+    public double getAverageAgeOfStudentsWithStreams() {
+        return studentRepository.findAll().stream()
+                .mapToInt(Student::getAge)
+                .average()
+                .orElse(0);
+    }
+
 
 }
