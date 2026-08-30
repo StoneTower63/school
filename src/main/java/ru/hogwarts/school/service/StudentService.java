@@ -13,6 +13,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.LongStream;
 
 @Service
 public class StudentService {
@@ -99,6 +100,12 @@ public class StudentService {
                 .mapToInt(Student::getAge)
                 .average()
                 .orElse(0);
+    }
+
+    public long getParallelSum() {
+        return LongStream.rangeClosed(1, 1_000_000)
+                .parallel()
+                .sum();
     }
 
 
