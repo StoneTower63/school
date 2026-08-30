@@ -85,4 +85,14 @@ public class StudentService {
         return students;
     }
 
+    public List<String> getAllStudentsStartingWithA() {
+        return studentRepository.findAll().stream()
+                .map(Student::getName)
+                .map(String::toUpperCase)
+                .filter(name -> name.startsWith("A"))
+                .sorted()
+                .toList();
+    }
+
+
 }
