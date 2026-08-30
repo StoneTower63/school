@@ -66,6 +66,21 @@ public class StudentController {
         return studentService.getLastFiveStudents();
     }
 
+    @GetMapping("/names-starting-with-a")
+    public java.util.List<String> getAllStudentsStartingWithA() {
+        return studentService.getAllStudentsStartingWithA();
+    }
+
+    @GetMapping("/average-age-stream")
+    public double getAverageAgeOfStudentsWithStreams() {
+        return studentService.getAverageAgeOfStudentsWithStreams();
+    }
+
+    @GetMapping("/parallel-sum")
+    public long getParallelSum() {
+        return studentService.getParallelSum();
+    }
+
     @ExceptionHandler(IllegalArgumentException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String handleIllegalArgumentException(IllegalArgumentException ex) {
