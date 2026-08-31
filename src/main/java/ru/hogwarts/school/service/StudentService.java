@@ -108,5 +108,25 @@ public class StudentService {
                 .sum();
     }
 
+    public void printStudentsParallel() {
+        List<Student> students = studentRepository.findAll();
+        if (students.size() < 6) {
+            logger.warn("Not enough students in database to perform parallel print. Need at least 6.");
+            return;
+        }
+
+        System.out.println(students.get(0).getName());
+        System.out.println(students.get(1).getName());
+
+        new Thread(() -> {
+            System.out.println(students.get(2).getName());
+            System.out.println(students.get(3).getName());
+        }).start();
+
+        new Thread(() -> {
+            System.out.println(students.get(4).getName());
+            System.out.println(students.get(5).getName());
+        }).start();
+    }
 
 }
