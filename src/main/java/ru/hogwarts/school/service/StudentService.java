@@ -13,6 +13,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.LongStream;
 
 @Service
 public class StudentService {
@@ -84,5 +85,28 @@ public class StudentService {
         logger.debug("Count of last students fetched from repository is: {}", students.size());
         return students;
     }
+
+    public List<String> getAllStudentsStartingWithA() {
+        return studentRepository.findAll().stream()
+                .map(Student::getName)
+                .map(String::toUpperCase)
+                .filter(name -> name.startsWith("A"))
+                .sorted()
+                .toList();
+    }
+
+    public double getAverageAgeOfStudentsWithStreams() {
+        return studentRepository.findAll().stream()
+                .mapToInt(Student::getAge)
+                .average()
+                .orElse(0);
+    }
+
+    public long getParallelSum() {
+        return LongStream.rangeClosed(1, 1_000_000)
+                .parallel()
+                .sum();
+    }
+
 
 }
